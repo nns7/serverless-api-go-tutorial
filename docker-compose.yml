@@ -1,0 +1,22 @@
+version: '3'
+services:
+  aws-sdk-go-containter: 
+    build: 
+      context: .
+      dockerfile: ./build/Dockerfile
+    container_name: aws-sdk-go-containter
+    depends_on:
+      - dynamodb-local
+    volumes:
+      - "~/.aws:/root/.aws"
+
+  # DynamoDB Local
+  dynamodb-local:
+    command: "-jar DynamoDBLocal.jar -sharedDb -optimizeDbBeforeStartup  -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports: 
+      - "8000:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
